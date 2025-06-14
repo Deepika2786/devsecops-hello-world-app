@@ -1,29 +1,21 @@
-// Jenkinsfile - This file defines our CI/CD pipeline stages.
-// We are using a 'declarative' pipeline syntax, which is easier to read and structure.
+// Updated jenkinsfile (only the git step changes)
 
 pipeline {
-    // 'agent any' means Jenkins can run this pipeline on any available agent (like our Jenkins master itself for now).
     agent any 
 
-    // 'stages' define the sequence of steps in your pipeline.
     stages {
-        // This is our first stage, named 'Checkout'.
         stage('Checkout') {
-            // 'steps' are the individual commands to execute within a stage.
             steps {
-                // This command checks out the code from the Git repository associated with this Jenkins job.
-                // Jenkins automatically knows which repo because we'll configure it in the job settings.
-                git branch: 'master', credentialsId: 'github-cred' // Assuming 'master' branch and a credential ID 'github-cred'
-                                                                // We will define this credential soon
+                // *** IMPORTANT CHANGE HERE: Added 'url' parameter ***
+                git url: 'https://github.com/Deepika2786/devsecops-hello-world-app.git', branch: 'master', credentialsId: 'github-cred' 
             }
         }
 
-        // This is our second stage, named 'Hello World'.
         stage('Hello World') {
             steps {
-                // This command prints a message to the Jenkins build console output.
                 echo 'Hello from Jenkins Pipeline! Code checked out successfully.'
             }
         }
     }
+}
 }
