@@ -1,17 +1,43 @@
+// jenkinsfile - This file defines our CI/CD pipeline stages.
+// We are using a 'declarative' pipeline syntax, which is easier to read and structure.
+
 pipeline {
+    // 'agent any' means Jenkins can run this pipeline on any available agent (like our Jenkins master itself for now).
     agent any 
 
+    // 'stages' define the sequence of steps in your pipeline.
     stages {
+        // This is our first stage, named 'Checkout'.
         stage('Checkout') {
+            // 'steps' are the individual commands to execute within a stage.
             steps {
+                // This command checks out the code from the Git repository associated with this Jenkins job.
+                // Jenkins automatically knows which repo because we'll configure it in the job settings.
                 git url: 'https://github.com/Deepika2786/devsecops-hello-world-app.git', branch: 'master', credentialsId: 'github-cred' 
             }
         }
-
+        
+        // This is our second stage, named 'Hello World'.
         stage('Hello World') {
             steps {
+                // This command prints a message to the Jenkins build console output.
                 echo 'Hello from Jenkins Pipeline! Code checked out successfully.'
             }
         }
-    }
-}
+        
+        // ===========================================
+        // *** START OF NEW STAGE TO ADD/PASTE ***
+        // ===========================================
+        stage('Build Docker Image') {
+            steps {
+                // This command builds your Docker image.
+                // '.' means Dockerfile is in the current directory.
+                // '-t devsecops-flask-app' tags the image with a name.
+                sh 'docker build -t devsecops-flask-app .' 
+            }
+        }
+        // ===========================================
+        // *** END OF NEW STAGE TO ADD/PASTE ***
+        // ===========================================
+    } // End of stages block
+} // End of pipeline block
